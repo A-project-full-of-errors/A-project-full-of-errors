@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 
 # 프로젝트 루트 디렉토리
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 # 환경 변수에서 SECRET_KEY를 가져오거나, 기본값을 사용
 SECRET_KEY = os.getenv('SECRET_KEY', 'your-default-secret-key')
@@ -92,19 +92,22 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # 국제화/지역화 관련 설정
 LANGUAGE_CODE = 'ko-KR'
+
 TIME_ZONE = 'UTC'
+
 USE_I18N = True
-USE_L10N = True
+
 USE_TZ = True
 
 # 정적 파일 설정
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+# STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # 배포 환경에서 권장되는 보안 설정
-SECURE_SSL_REDIRECT = False
-SESSION_COOKIE_SECURE = False
-CSRF_COOKIE_SECURE = False
+# SECURE_SSL_REDIRECT = False
+# SESSION_COOKIE_SECURE = False
+# CSRF_COOKIE_SECURE = False
+

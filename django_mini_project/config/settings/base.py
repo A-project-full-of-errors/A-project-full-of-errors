@@ -8,8 +8,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 # 환경 변수에서 SECRET_KEY를 가져오거나, 기본값을 사용
 SECRET_KEY = os.getenv('SECRET_KEY', 'your-default-secret-key')
 
-# 기본적으로 False로 설정 (development.py, production.py에서 override)
-DEBUG = False
+# 기본적으로 False로 설정 (dev.py, production.py에서 override)
+DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -21,6 +21,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # 필요에 따라 추가 앱
+    'rest_framework',
+    "django_extensions",
 ]
 
 MIDDLEWARE = [
@@ -35,8 +37,8 @@ MIDDLEWARE = [
 
 # URL 설정 파일은 환경별로 달라질 수 있으므로,
 # base.py에서는 굳이 ROOT_URLCONF를 지정하지 않아도 됩니다.
-# 필요하다면 development.py, production.py에서 override하세요.
-ROOT_URLCONF = 'config.urls.production'
+# 필요하다면 dev.py, production.py에서 override하세요.
+ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
     {
@@ -58,14 +60,36 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 # 데이터베이스 (기본 예시는 SQLite)
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "django_db",  # 만든 DB 이름
+        "USER": "django_user",  # 만든 사용자명
+        "PASSWORD": "1234",  # 비밀번호
+        "HOST": "localhost",  # 로컬 개발환경
+        "PORT": "5432",  # PostgreSQL 기본 포트
     }
 }
 
+# Password validation
+# https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
+
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+]
+
 # 국제화/지역화 관련 설정
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ko-KR'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_L10N = True
@@ -74,3 +98,11 @@ USE_TZ = True
 # 정적 파일 설정
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# 배포 환경에서 권장되는 보안 설정
+SECURE_SSL_REDIRECT = False
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False

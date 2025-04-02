@@ -1,4 +1,4 @@
-# config/urls/production.py
+# config/urls/prod.py
 from django.contrib import admin
 from django.urls import path
 

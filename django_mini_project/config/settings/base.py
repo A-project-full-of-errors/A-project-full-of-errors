@@ -7,6 +7,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 # 환경 변수에서 SECRET_KEY를 가져오거나, 기본값을 사용
 SECRET_KEY = os.getenv('SECRET_KEY', 'your-default-secret-key')
+#
 
 # 기본적으로 False로 설정 (dev.py, production.py에서 override)
 DEBUG = True

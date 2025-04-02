@@ -39,6 +39,7 @@ MIDDLEWARE = [
 # URL 설정 파일은 환경별로 달라질 수 있으므로,
 # base.py에서는 굳이 ROOT_URLCONF를 지정하지 않아도 됩니다.
 # 필요하다면 dev.py, production.py에서 override하세요.
+# 여기도 수정했
 ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [

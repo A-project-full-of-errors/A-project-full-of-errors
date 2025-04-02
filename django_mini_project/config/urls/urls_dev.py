@@ -1,4 +1,4 @@
-# config/urls/development.py
+# config/urls/dev.py
 from django.contrib import admin
 from django.urls import path, include
 

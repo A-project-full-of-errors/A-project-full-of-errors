@@ -21,9 +21,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'rest_framework',
     "django_extensions",
-    "accounts",
+
+    'accounts',
+    'transactions',
 ]
 
 MIDDLEWARE = [
@@ -64,9 +67,9 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "postgres",  # 만든 DB 이름
-        "USER": "postgres",  # 만든 사용자명
-        "PASSWORD": "root",  # 비밀번호
+        "NAME": "django_db",  # 만든 DB 이름
+        "USER": "django_user",  # 만든 사용자명
+        "PASSWORD": "1234",  # 비밀번호
         "HOST": "localhost",  # 로컬 개발환경
         "PORT": "5432",  # PostgreSQL 기본 포트
     }
@@ -92,7 +95,6 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # 국제화/지역화 관련 설정
 LANGUAGE_CODE = 'ko-KR'
-
 TIME_ZONE = 'UTC'
 
 USE_I18N = True

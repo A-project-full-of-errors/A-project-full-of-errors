@@ -16,6 +16,7 @@
 ![ERD](https://github.com/user-attachments/assets/9bebfdf6-cd90-4303-be00-11984355044a)
 
 <hr>
+
 ## 회원가입 / 로그인 / 로그아웃 플로우 차트
 
 1. 회원가입

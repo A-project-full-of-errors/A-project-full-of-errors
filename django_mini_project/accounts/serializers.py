@@ -1,13 +1,17 @@
 from rest_framework import serializers
-from django.contrib.auth import get_user_model
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from users.models import User
+from django.contrib.auth.hashers import make_password
 
-User = get_user_model()
+class UserSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, required=False)
 
-class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
-    @classmethod
-    def get_token(cls, user):
-        token = super().get_token(user)
-        # 필요하면 추가 데이터 삽입 가능
-        token["username"] = user.username
-        return token
+    class Meta:
+        model = User
+        fields = ['user_id', 'email', 'nickname', 'name', 'phone_number', 'password', 'created_at']
+        read_only_fields = ['user_id', 'email', 'created_at']
+
+    def update(self, instance, validated_data):
+        password = validated_data.pop('password', None)
+        if password:
+            instance.password = make_password(password)
+        return super().update(instance, validated_data)

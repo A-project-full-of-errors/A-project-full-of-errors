@@ -25,7 +25,7 @@ class Account(models.Model):
     # 계좌 타입
     account_type = models.CharField(max_length=20, null=True, blank=True, db_column='account_type')
     # 잔액
-    balance = models.DecimalField(max_digits=18, decimal_places=2, null=True, blank=True, db_column='balance')
+    balance = models.PositiveIntegerField(null=True, blank=True, db_column='balance')
 
     #생성 및 업데이트 시간
     create_at = models.DateTimeField(auto_now_add=True, null=True, blank=True, db_column='create_at')
@@ -35,4 +35,4 @@ class Account(models.Model):
         return f"{self.account_number} ({self.user})"
 
     class Meta:
-        db_table = 'accounts' 
+        db_table = 'accounts'

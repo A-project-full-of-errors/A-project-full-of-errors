@@ -49,7 +49,7 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],  # 템플릿 디렉토리 경로
+        'DIRS': [BASE_DIR / 'templates'],  # 템플릿 디렉토리 설정
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -108,6 +108,8 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+AUTH_USER_MODEL = 'users.CustomUser'
+
 
 # 배포 환경에서 권장되는 보안 설정
 # SECURE_SSL_REDIRECT = False
@@ -134,3 +136,6 @@ SIMPLE_JWT = {
     "AUTH_COOKIE_HTTP_ONLY": True,
     "AUTH_COOKIE_SAMESITE": "Lax",
 }
+
+LOGIN_URL = '/login'
+LOGOUT_REDIRECT_URL = '/'

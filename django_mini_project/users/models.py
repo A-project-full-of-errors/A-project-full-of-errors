@@ -49,7 +49,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return self.email
 
     def clean(self):
-        # 전화번호 유효성 검사 (선택 사항)
+        # 전화번호 유효성 검사
         if self.phone_number:
             from phonenumbers import parse, is_valid_number, NumberParseException
             try:

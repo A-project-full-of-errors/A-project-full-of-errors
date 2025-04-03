@@ -21,9 +21,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 필요에 따라 추가 앱
+
     'rest_framework',
     "django_extensions",
+
+    'accounts',
+    'transaction_history',
 ]
 
 MIDDLEWARE = [
@@ -92,7 +95,6 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # 국제화/지역화 관련 설정
 LANGUAGE_CODE = 'ko-KR'
-
 TIME_ZONE = 'UTC'
 
 USE_I18N = True

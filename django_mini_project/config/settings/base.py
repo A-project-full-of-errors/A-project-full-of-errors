@@ -14,6 +14,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+AUTH_USER_MODEL = 'users.CustomUser'
+
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -26,6 +29,7 @@ INSTALLED_APPS = [
     'rest_framework',
     "django_extensions",
 
+    'users',
     'accounts',
     'transaction_history',
 ]
@@ -108,7 +112,6 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'users.CustomUser'
 
 
 # 배포 환경에서 권장되는 보안 설정

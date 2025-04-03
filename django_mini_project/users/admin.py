@@ -1,30 +1,28 @@
-# users/admin.py
-
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import User
+from .models import CustomUser
 
 
-class UserAdmin(BaseUserAdmin):
-    model = User
-    list_display = ('email', 'nickname', 'name', 'is_admin', 'is_staff')
-    list_filter = ('is_admin', 'is_staff')
-    ordering = ('-created_at',)
+class CustomUserAdmin(BaseUserAdmin):
+    model = CustomUser
+    list_display = ('email', 'name', 'is_superuser', 'is_staff', 'is_active')
+    list_filter = ('is_superuser', 'is_staff', 'is_active')
+    ordering = ('email',)  # UUID 기반 정렬
 
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        ('개인 정보', {'fields': ('nickname', 'name', 'phone_number')}),
-        ('권한', {'fields': ('is_admin', 'is_staff', 'is_active', 'is_superuser', 'groups', 'user_permissions')}),
+        ('개인 정보', {'fields': ('name', 'phone_number')}),
+        ('권한 설정', {'fields': ('is_superuser', 'is_staff', 'is_active', 'groups', 'user_permissions')}),
     )
 
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'nickname', 'name', 'phone_number', 'password1', 'password2', 'is_staff', 'is_admin'),
+            'fields': ('email', 'name', 'phone_number', 'password'),
         }),
     )
 
-    search_fields = ('email', 'nickname', 'name')
+    search_fields = ('email', 'name', 'phone_number')
 
 
-admin.site.register(User, UserAdmin)
+admin.site.register(CustomUser, CustomUserAdmin)

@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'rest_framework',
     "django_extensions",
     "accounts",
+    "transaction_history",
 ]
 
 MIDDLEWARE = [

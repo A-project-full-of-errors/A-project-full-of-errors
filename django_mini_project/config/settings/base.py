@@ -14,6 +14,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+AUTH_USER_MODEL = 'users.CustomUser'
+
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -21,10 +24,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'rest_framework_simplejwt.token_blacklist',
     'rest_framework',
     "django_extensions",
-    "accounts",
-    "transaction_history",
+
+    'users',
+    'accounts',
+    'transaction_history',
 ]
 
 MIDDLEWARE = [
@@ -46,7 +53,7 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],  # 템플릿 디렉토리 경로
+        'DIRS': [BASE_DIR / 'templates'],  # 템플릿 디렉토리 설정
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -65,9 +72,9 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "postgres",  # 만든 DB 이름
-        "USER": "postgres",  # 만든 사용자명
-        "PASSWORD": "root",  # 비밀번호
+        "NAME": "django_db",  # 만든 DB 이름
+        "USER": "django_user",  # 만든 사용자명
+        "PASSWORD": "1234",  # 비밀번호
         "HOST": "localhost",  # 로컬 개발환경
         "PORT": "5432",  # PostgreSQL 기본 포트
     }
@@ -93,7 +100,6 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # 국제화/지역화 관련 설정
 LANGUAGE_CODE = 'ko-KR'
-
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
@@ -107,8 +113,32 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+
 # 배포 환경에서 권장되는 보안 설정
 # SECURE_SSL_REDIRECT = False
 # SESSION_COOKIE_SECURE = False
 # CSRF_COOKIE_SECURE = False
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+    "ROTATE_REFRESH_TOKENS": False,
+    "BLACKLIST_AFTER_ROTATION": True,
+    "AUTH_HEADER_TYPES": ("Bearer",),
+    "AUTH_COOKIE": "access_token",
+    "AUTH_COOKIE_REFRESH": "refresh_token",
+    "AUTH_COOKIE_SECURE": True,
+    "AUTH_COOKIE_HTTP_ONLY": True,
+    "AUTH_COOKIE_SAMESITE": "Lax",
+}
+
+LOGIN_URL = '/login'
+LOGOUT_REDIRECT_URL = '/'

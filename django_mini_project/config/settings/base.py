@@ -106,6 +106,7 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+AUTH_USER_MODEL = 'users.CustomUser'
 
 # 배포 환경에서 권장되는 보안 설정
 # SECURE_SSL_REDIRECT = False

@@ -112,7 +112,7 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
+CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1:8000"]
 
 # 배포 환경에서 권장되는 보안 설정
 # SECURE_SSL_REDIRECT = False

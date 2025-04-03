@@ -26,7 +26,7 @@ INSTALLED_APPS = [
     "django_extensions",
 
     'accounts',
-    'transactions',
+    'transaction_history',
 ]
 
 MIDDLEWARE = [

@@ -28,7 +28,6 @@ class User(models.Model):
         return self.email
 
     def set_password(self, raw_password):
-        """비밀번호를 해싱하여 안전하게 저장합니다."""
         from django.contrib.auth.hashers import make_password
         self.password = make_password(raw_password)
 

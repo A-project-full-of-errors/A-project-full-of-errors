@@ -48,14 +48,13 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "balance",
-                    models.DecimalField(
+                    models.PositiveIntegerField(
                         blank=True,
                         db_column="balance",
-                        decimal_places=2,
-                        max_digits=18,
                         null=True,
                     ),
                 ),
+
                 (
                     "create_at",
                     models.DateTimeField(

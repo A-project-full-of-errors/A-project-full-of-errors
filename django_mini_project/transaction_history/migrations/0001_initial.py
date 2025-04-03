@@ -29,14 +29,13 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "transaction_amount",
-                    models.DecimalField(
+                    models.PositiveIntegerField(
                         blank=True,
                         db_column="transaction_amount",
-                        decimal_places=2,
-                        max_digits=18,
                         null=True,
                     ),
                 ),
+
                 (
                     "transaction_details",
                     models.CharField(
@@ -63,11 +62,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "after_balance",
-                    models.DecimalField(
+                    models.PositiveIntegerField(
                         blank=True,
                         db_column="after_balance",
-                        decimal_places=2,
-                        max_digits=18,
                         null=True,
                     ),
                 ),

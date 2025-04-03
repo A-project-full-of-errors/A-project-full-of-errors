@@ -12,6 +12,8 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'your-default-secret-key')
 # 기본적으로 False로 설정 (dev.py, production.py에서 override)
 DEBUG = True
 
+AUTH_USER_MODEL = 'users.User'
+
 ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [

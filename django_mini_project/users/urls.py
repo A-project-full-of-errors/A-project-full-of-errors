@@ -18,4 +18,5 @@ urlpatterns = [
     path("signup-form/", SignupPageView.as_view(), name="signup_form"),
     path("login-form/", LoginPageView.as_view(), name="login_form"),
     path("profile/", ProfilePageView.as_view(), name="profile_page"),
+    path("me/", UserDetailView.as_view(), name="user_detail"),
 ]

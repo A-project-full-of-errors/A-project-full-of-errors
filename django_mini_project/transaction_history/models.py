@@ -16,13 +16,12 @@ class TransactionHistory(models.Model):
         related_name='transaction_histories'
     )
     # 거래 금액
-    transaction_amount = models.DecimalField(
-        max_digits=18,
-        decimal_places=2,
+    transaction_amount = models.PositiveIntegerField(
         null=True,
         blank=True,
         db_column='transaction_amount'
     )
+
     # 거래 상세 내용
     transaction_details = models.CharField(
         max_length=255,
@@ -44,13 +43,12 @@ class TransactionHistory(models.Model):
         db_column='transaction_date'
     )
     # 잔액
-    after_balance = models.DecimalField(
-        max_digits=18,
-        decimal_places=2,
+    after_balance = models.PositiveIntegerField(
         null=True,
         blank=True,
         db_column='after_balance'
     )
+
     # 거래 방법
     transaction_method = models.CharField(
         max_length=20,

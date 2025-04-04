@@ -69,12 +69,22 @@ TEMPLATES = [
 WSGI_APPLICATION = 'config.wsgi.application'
 
 # 데이터베이스 (기본 예시는 SQLite)
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": "postgres",  # 만든 DB 이름
+#         "USER": "postgres",  # 만든 사용자명
+#         "PASSWORD": "root",  # 비밀번호
+#         "HOST": "localhost",  # 로컬 개발환경
+#         "PORT": "5432",  # PostgreSQL 기본 포트
+#     }
+# }
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "postgres",  # 만든 DB 이름
-        "USER": "postgres",  # 만든 사용자명
-        "PASSWORD": "root",  # 비밀번호
+        "NAME": "django_db",  # 만든 DB 이름
+        "USER": "django_user",  # 만든 사용자명
+        "PASSWORD": "1234",  # 비밀번호
         "HOST": "localhost",  # 로컬 개발환경
         "PORT": "5432",  # PostgreSQL 기본 포트
     }

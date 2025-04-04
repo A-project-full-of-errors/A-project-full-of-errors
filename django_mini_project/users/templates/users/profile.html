@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Profile</h2>
+<p>Email: {{ user.email }}</p>
+<p>Name: {{ user.name }}</p>
+
+<!-- 🔹 수정 버튼 -->
+<a href="{% url 'edit_profile' pk=user.pk %}" class="btn btn-outline-primary mt-3">프로필 수정</a>
+
+<form action="{% url 'delete_user' pk=user.pk %}" method="post" style="display:inline;">
+  {% csrf_token %}
+  <button type="submit" class="btn btn-outline-danger mt-3">회원 탈퇴</button>
+</form>
+{% endblock %}

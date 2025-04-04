@@ -4,4 +4,21 @@
 <h2>Profile</h2>
 <p>Email: {{ user.email }}</p>
 <p>Name: {{ user.name }}</p>
+
+<!-- 회원정보 수정 -->
+<h3>회원정보 수정</h3>
+<form method="post" action="/profile/">
+    {% csrf_token %}
+    <input type="hidden" name="_method" value="PATCH">
+    <input type="text" name="name" placeholder="이름 수정" value="{{ user.name }}">
+    <button type="submit">수정하기</button>
+</form>
+
+<!-- 회원 탈퇴 -->
+<h3>회원 탈퇴</h3>
+<form method="post" action="/profile/">
+    {% csrf_token %}
+    <input type="hidden" name="_method" value="DELETE">
+    <button type="submit" onclick="return confirm('정말 탈퇴하시겠습니까?')">회원 탈퇴</button>
+</form>
 {% endblock %}

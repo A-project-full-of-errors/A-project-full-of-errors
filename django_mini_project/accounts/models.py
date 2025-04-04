@@ -15,7 +15,8 @@ class Account(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         db_column='user_id',
-        related_name='accounts'
+        related_name='accounts',
+        to_field='id'
     )
 
     # 계좌 번호

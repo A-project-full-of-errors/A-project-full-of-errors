@@ -1,17 +1,23 @@
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth import login, logout, authenticate
+from django.urls import reverse_lazy
+
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.permissions import IsAuthenticated
+
 from .models import CustomUser
-from .serializers import RegisterSerializer, UserSerializer
 from .forms import CustomUserCreationForm, CustomAuthenticationForm
-from django.urls import reverse_lazy
+from .serializers import (
+    RegisterSerializer,
+    UserSerializer,
+    UserProfileSerializer,  # ✅ 프로필용 직렬화기
+)
+
 
 # ✅ 회원가입 폼 페이지 (HTML 렌더링)
 class SignupPageView(View):
@@ -20,11 +26,12 @@ class SignupPageView(View):
         return render(request, "signup.html", {"form": form})
 
     def post(self, request):
-        form = CustomUserCreationForm(request.POST)  # 폼 데이터 받기
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            form.save()  # 유저 생성
-            return redirect("login_form")  # 🚀 회원가입 성공하면 로그인 페이지로 이동
-        return render(request, "signup.html", {"form": form})  # 실패 시 다시 폼 표시
+            form.save()
+            return redirect("login_form")
+        return render(request, "signup.html", {"form": form})
+
 
 # ✅ 로그인 폼 페이지 (HTML 렌더링 & 로그인 처리)
 class LoginPageView(View):
@@ -36,15 +43,30 @@ class LoginPageView(View):
         form = CustomAuthenticationForm(request, data=request.POST)
         if form.is_valid():
             user = form.get_user()
-            login(request, user)  # 로그인 처리
-            return redirect("profile_page")  # ✅ 로그인 성공 시 프로필 페이지로 이동
-        return render(request, "login.html", {"form": form})  # 로그인 실패 시 다시 로그인 페이지
+            login(request, user)
+            return redirect("profile_page")
+        return render(request, "login.html", {"form": form})
 
 
 # ✅ 프로필 페이지 (HTML 렌더링)
 class ProfilePageView(View):
     def get(self, request):
         return render(request, "profile.html")
+
+    def post(self, request):
+        method = request.POST.get('_method')
+
+        if method == 'PATCH':
+            request.user.name = request.POST.get('name')
+            request.user.save()
+            return redirect('profile_page')
+
+        elif method == 'DELETE':
+            request.user.delete()
+            return redirect('home')
+
+        return render(request, "profile.html")
+
 
 
 # ✅ 회원가입 API (회원가입 성공 시 로그인 페이지로 이동)
@@ -54,29 +76,26 @@ class RegisterView(generics.CreateAPIView):
 
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)
-
-        if response.status_code == 201:  # 회원가입 성공 시
-            return redirect(reverse_lazy("login_form"))  # 🚀 더 안전한 리디렉트
-
-        return response  # 실패 시 기존 응답 반환
+        if response.status_code == 201:
+            return redirect(reverse_lazy("login_form"))
+        return response
 
 
 # ✅ 로그인 API (JWT + 쿠키 저장)
 class CustomTokenObtainPairView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
         response = super().post(request, *args, **kwargs)
-        access_token = response.data.get('access')
-        refresh_token = response.data.get('refresh')
+        access_token = response.data.get("access")
+        refresh_token = response.data.get("refresh")
 
-        # ✅ email과 password로 사용자 인증
         email = request.data.get("email")
         password = request.data.get("password")
         user = authenticate(request, email=email, password=password)
 
         if user is not None:
-            login(request, user)  # 로그인 처리
-            response.set_cookie('access_token', access_token, httponly=True)
-            response.set_cookie('refresh_token', refresh_token, httponly=True)
+            login(request, user)
+            response.set_cookie("access_token", access_token, httponly=True)
+            response.set_cookie("refresh_token", refresh_token, httponly=True)
             return response
         else:
             return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
@@ -85,41 +104,37 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 # ✅ 로그아웃 API (쿠키 삭제 & 토큰 블랙리스트 추가)
 class LogoutView(APIView):
     def post(self, request):
-        refresh_token = request.COOKIES.get('refresh_token')
+        refresh_token = request.COOKIES.get("refresh_token")
         if refresh_token:
             token = RefreshToken(refresh_token)
-            token.blacklist()  # 토큰 블랙리스트 처리
+            token.blacklist()
 
-        logout(request)  # Django 로그아웃
+        logout(request)
 
         response = redirect("home")
-        response.delete_cookie('access_token')
-        response.delete_cookie('refresh_token')
+        response.delete_cookie("access_token")
+        response.delete_cookie("refresh_token")
         return response
 
 
-# ✅ 유저 정보 조회, 수정, 삭제 API
+# ✅ 유저 정보 조회, 수정, 삭제 API + 폼 POST 수동 처리
 class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.all()
-    serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated]  # 🔹 인증된 사용자만 접근 가능
+    serializer_class = UserProfileSerializer
+    permission_classes = [IsAuthenticated]
 
     def get_object(self):
-        return self.request.user  # 🔹 현재 로그인한 유저의 정보만 반환
+        return self.request.user
 
-    def put(self, request, *args, **kwargs):
-        """
-        🔹 PUT 요청: 전체 데이터 수정 (모든 필드 필요)
-        - name, email, password 등 전체 데이터 전달해야 함
-        """
-        return super().put(request, *args, **kwargs)
+    def post(self, request, *args, **kwargs):
+        method = request.POST.get('_method')
 
-    def patch(self, request, *args, **kwargs):
-        """
-        🔹 PATCH 요청: 일부 데이터 수정 (변경할 필드만 전달)
-        - 예: {"name": "새로운 이름"} 만 보내도 수정 가능
-        """
-        return super().patch(request, *args, **kwargs)
+        if method == 'PATCH':
+            return self.partial_update(request, *args, **kwargs)
+        elif method == 'DELETE':
+            return self.delete(request, *args, **kwargs)
+
+        return Response({"error": "Method not allowed"}, status=405)
 
     def delete(self, request, *args, **kwargs):
         user = self.get_object()

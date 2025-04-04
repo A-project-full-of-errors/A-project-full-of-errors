@@ -7,6 +7,12 @@ from django.conf import settings
 from rest_framework.exceptions import ValidationError
 from itsdangerous import URLSafeTimedSerializer
 
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ('email', 'name', 'phone_number')
+        read_only_fields = ('email',) #수정방지
+
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)

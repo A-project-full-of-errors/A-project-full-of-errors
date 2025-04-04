@@ -112,8 +112,17 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1:8000"]
-
+CORS_ALLOWED_ORIGINS = [
+    "http://127.0.0.1:8000",
+    "http://localhost:8000",
+]
+CSRF_TRUSTED_ORIGINS = [
+    "http://127.0.0.1:8000",
+    "http://localhost:8000",
+]
+CSRF_COOKIE_HTTPONLY = False  # ✅ JS에서 CSRF 토큰 읽을 수 있도록 설정
+CSRF_COOKIE_SECURE = False  # ✅ 개발 환경에서는 False
+SESSION_COOKIE_SECURE = False
 # 배포 환경에서 권장되는 보안 설정
 # SECURE_SSL_REDIRECT = False
 # SESSION_COOKIE_SECURE = False

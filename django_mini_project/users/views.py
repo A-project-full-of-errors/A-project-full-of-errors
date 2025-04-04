@@ -4,8 +4,10 @@ from django.contrib.auth import login, logout, authenticate
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework.permissions import IsAuthenticated
 from .models import CustomUser
 from .serializers import RegisterSerializer, UserSerializer
 from .forms import CustomUserCreationForm, CustomAuthenticationForm
@@ -96,11 +98,30 @@ class LogoutView(APIView):
         return response
 
 
-# ✅ 유저 정보 조회 및 수정 API
-class UserDetailView(generics.RetrieveUpdateAPIView):
+# ✅ 유저 정보 조회, 수정, 삭제 API
+class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]  # 🔹 인증된 사용자만 접근 가능
 
     def get_object(self):
-        return self.request.user
+        return self.request.user  # 🔹 현재 로그인한 유저의 정보만 반환
+
+    def put(self, request, *args, **kwargs):
+        """
+        🔹 PUT 요청: 전체 데이터 수정 (모든 필드 필요)
+        - name, email, password 등 전체 데이터 전달해야 함
+        """
+        return super().put(request, *args, **kwargs)
+
+    def patch(self, request, *args, **kwargs):
+        """
+        🔹 PATCH 요청: 일부 데이터 수정 (변경할 필드만 전달)
+        - 예: {"name": "새로운 이름"} 만 보내도 수정 가능
+        """
+        return super().patch(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        user = self.get_object()
+        user.delete()
+        return Response({"message": "Deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
